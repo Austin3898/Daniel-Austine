@@ -1,0 +1,112 @@
+body {
+  background: #0f172a;
+  color: white;
+  font-family: Inter, system-ui, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* Container */
+.container {
+  width: 100%;           /* full width of parent */
+  max-width: 420px;      /* keep max width */
+  padding: 32px;
+  border-radius: 12px;
+  background: #111827;
+  border: 1px solid #1f2937;
+
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.container h1 {
+  margin-bottom: 24px;
+  font-size: 22px;
+}
+
+/* Inputs */
+.inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.inputs input {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #374151;
+  background: #020617;
+  color: white;
+  font-size: 14px;
+}
+
+.inputs input:focus {
+  outline: none;
+  border-color: #6366f1;
+}
+
+/* Buttons */
+.buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;      /* allows buttons to wrap on small screens */
+}
+
+button {
+  flex: 1;
+  padding: 11px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Primary Button */
+.generate {
+  background: #6366f1;
+  color: white;
+}
+
+.generate:hover {
+  background: #4f46e5;
+}
+
+/* Secondary Button */
+.explain {
+  background: #1f2937;
+  color: white;
+}
+
+.explain:hover {
+  background: #374151;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .container {
+    padding: 24px;
+    width: 90%;
+  }
+
+  .buttons {
+    flex-direction: column; /* stack buttons vertically on small screens */
+  }
+
+  button {
+    flex: unset;
+    width: 100%;
+  }
+}
