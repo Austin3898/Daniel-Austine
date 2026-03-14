@@ -1,8 +1,12 @@
-import ollama
 from fastapi import FastAPI
+from pydantic import BaseModel
+import requests
+import os
+
+OLLAMA_URL = os.getenv("OLLAMA_HOST", "http://ollama:11434")
 
 GEN_PROMPT = """
-ONLY Generate an idea Dockerfile for {langugage} with best practices. Do not provide any description
+ONLY Generate an idea Dockerfile for {language} with best practices. Do not provide any description
 Include:
 - Base image
 - Installing dependencies
@@ -13,9 +17,22 @@ Include:
 """
 
 EXP_PROMPT = """
-Given a line by line explanation of the following dockerfile
-{dockerfile} 
+Explain the following Dockerfile line by line.
+
+For each instruction explain:
+- what it does
+- why it is used
+
+Dockerfile:
+{dockerfile}
 """
+
+class GenerateRequest(BaseModel):
+    language: str
+    additional_args: str
+
+class ExplainRequest(BaseModel):
+    dockerfile: str
 
 app = FastAPI()
 
@@ -23,12 +40,29 @@ app = FastAPI()
 async def root():
     return {"message": "Hello World!"}
 
-@app.post("/generate")
-async def generate_dockerfile(language, additional_args):
-    response = ollama.chat(model='llama3.2:1b', messages = [{'role': 'user', 'content': GEN_PROMPT.format(langugage=langugage, additional_args=additional_args)}])
-    return response['message']['content']
+@app.post("/generate/")
+async def generate_dockerfile(req: GenerateRequest):
+    response = requests.post(
+        f"{OLLAMA_URL}/api/generate",
+        json={
+            "model": "llama3.2:1b",
+            "prompt": GEN_PROMPT.format(
+                language=req.language,
+                additional_args=req.additional_args
+            ),
+            "stream": False
+        }
+    )
+    return response.json()
 
-@app.post("/explain")
-async def explain_dockerfile(dockerfile):
-    response = ollama.chat(model='llama3.2:1b', messages = [{'role': 'user', 'content': EXP_PROMPT.format(langugage=langugage, additional_args=additional_args)}])
-    return response['message']['content']
+@app.post("/explain/")
+async def explain_dockerfile(req: ExplainRequest):
+    response = requests.post(
+        f"{OLLAMA_URL}/api/generate",
+        json={
+            "model": "llama3.2:1b",
+            "prompt": EXP_PROMPT.format(dockerfile=req.dockerfile),
+            "stream": False
+        }
+    )
+    return response.json()

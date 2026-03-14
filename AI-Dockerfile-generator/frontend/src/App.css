@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   background: #0f172a;
   color: white;
@@ -7,49 +11,52 @@ body {
 }
 
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.container {
+  width: 100%;
+  min-height: 100vh;
+  padding: 32px;
 
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+
+  background: #111827;
 }
 
-/* Container */
-.container {
-  width: 100%;           /* full width of parent */
-  max-width: 420px;      /* keep max width */
-  padding: 32px;
-  border-radius: 12px;
-  background: #111827;
-  border: 1px solid #1f2937;
+.content {
+  width: 100%;
+  max-width: 700px;
 
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
 }
 
 .container h1 {
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   font-size: 22px;
 }
 
-/* Inputs */
 .inputs {
   display: flex;
   flex-direction: column;
   gap: 14px;
+  width: 100%;
 }
 
 .inputs input {
+  width: 100%;
   padding: 12px;
   border-radius: 8px;
   border: 1px solid #374151;
   background: #020617;
   color: white;
   font-size: 14px;
+  box-sizing: border-box;
 }
 
 .inputs input:focus {
@@ -57,24 +64,24 @@ body {
   border-color: #6366f1;
 }
 
-/* Buttons */
 .buttons {
   display: flex;
   gap: 10px;
   margin-top: 10px;
-  flex-wrap: wrap;      /* allows buttons to wrap on small screens */
+  width: 100%;
 }
 
-button {
+.buttons button {
   flex: 1;
-  padding: 11px;
+  width: 100%;
+  padding: 12px;
   border-radius: 8px;
   border: none;
   font-weight: 600;
   cursor: pointer;
+  font-size: 14px;
 }
 
-/* Primary Button */
 .generate {
   background: #6366f1;
   color: white;
@@ -84,7 +91,6 @@ button {
   background: #4f46e5;
 }
 
-/* Secondary Button */
 .explain {
   background: #1f2937;
   color: white;
@@ -94,19 +100,89 @@ button {
   background: #374151;
 }
 
-/* Responsive adjustments */
-@media (max-width: 480px) {
+.code {
+  position: relative;
+  margin-top: 20px;
+  background: #020617;
+  border: 1px solid #1f2937;
+  border-radius: 10px;
+
+  padding: 40px 16px 16px 16px;
+
+  font-family: monospace;
+  font-size: 14px;
+
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+
+  overflow-x: auto;
+}
+
+.code pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.copy {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  width: auto;
+  flex: none;
+
+  background: #1f2937;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.copy:hover {
+  background: #374151;
+}
+
+@media (max-width: 768px) {
+
   .container {
     padding: 24px;
-    width: 90%;
+  }
+
+  .content {
+    max-width: 100%;
+  }
+
+}
+
+@media (max-width: 480px) {
+
+  .container {
+    padding: 20px;
   }
 
   .buttons {
-    flex-direction: column; /* stack buttons vertically on small screens */
+    flex-direction: column;
   }
 
   button {
-    flex: unset;
     width: 100%;
   }
+
+}
+
+.loader {
+  width: clamp(30px, 6vw, 60px);
+  border: clamp(3px, 0.8vw, 6px) solid #f3f3f3;
+  border-top: clamp(3px, 0.8vw, 6px) solid #4caf50;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 2rem auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

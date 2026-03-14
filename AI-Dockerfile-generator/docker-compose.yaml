@@ -1,0 +1,39 @@
+services:
+  ollama:
+    build: ./ollama
+    container_name: ollama
+    ports:
+      - "11434:11434"
+
+  backend:
+    build: ./backend
+    container_name: backend
+    depends_on:
+      - ollama
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+    expose:
+      - "8000"
+
+  frontend-builder:
+    build: ./frontend
+    container_name: frontend-builder
+    command: ["npm", "run", "build"]
+    volumes:
+      - frontend_build:/app/dist
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    depends_on:
+      - backend
+      - frontend-builder
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - frontend_build:/usr/share/nginx/html
+
+volumes:
+  ollama_data:
+  frontend_build:
